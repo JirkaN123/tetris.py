@@ -1,12 +1,12 @@
 import pygame
 
-
 class Tetris:
     def __init__(self):
         pygame.init()
         self.screen = pygame.display.set_mode((400, 600))
         pygame.display.set_caption("Tetris")
         self.clock = pygame.time.Clock()
+        self.timer = 0
         self.running = True
         self.death = False
         self.death_zone = 0
@@ -83,17 +83,16 @@ class Tetris:
         for y in range(20):
             for x in range(10):
                 if self.map[y][x] == 1:
-                    pygame.draw.rect(self.screen, (255, 255, 255), (x * 20, y * 20, 20, 20))
+                    pygame.draw.rect(self.screen, self.colorlist[self.map[y][x] - 1], (x * 20, y * 20, 20, 20))
         if self.current_piece is not None:
             for y in range(len(self.current_piece)):
                 for x in range(len(self.current_piece[y])):
                     if self.current_piece[y][x] == 1:
-                        pygame.draw.rect(self.screen, (255, 0, 0), ((self.piece_x + x) * 20, (self.piece_y + y) * 20, 20, 20))
+                        pygame.draw.rect(self.screen, self.colorlist[self.blocks.index(self.current_piece)], ((self.piece_x + x) * 20, (self.piece_y + y) * 20, 20, 20))
         pygame.display.flip()
 
     def spawn_piece(self):
         import random
-        self.colorlist.append(self.colorlist.pop(0))
         self.current_piece = random.choice(self.blocks)
         self.piece_x = 3
         self.piece_y = 0
@@ -130,7 +129,6 @@ class Tetris:
         except IndexError:
             return False
             
-    
     def lock_piece(self):
         for y in range(len(self.current_piece)):
             for x in range(len(self.current_piece[y])):
